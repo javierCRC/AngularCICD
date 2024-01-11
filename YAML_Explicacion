@@ -1,0 +1,40 @@
+Trigger: La sección de desencadenadores especifica cuándo debe activarse la canalización. En este caso, se configura para activarse ante cambios en la rama "main" del repositorio.
+
+trigger:
+  - main
+
+Pool:  La sección de piscina define el conjunto de agentes y la imagen de la máquina virtual que se utilizará para ejecutar la canalización. Especifica que la canalización debe utilizar la imagen de máquina virtual "ubuntu-latest".
+
+pool:
+  vmImage: ubuntu-latest
+
+Variables: La sección de variables te permite definir variables específicas del entorno que se pueden utilizar en la canalización. En este código, se define una variable llamada appName con el valor "ANGULARAPPNAME".
+
+variables:
+  appName: 'ANGULARAPPNAME'
+
+Steps: La sección de pasos describe la serie de tareas que la canalización debe ejecutar. Cada paso se ejecuta de manera secuencial.
+
+Step 0: Proceso de construcción
+  *-> Este paso es un script sencillo que muestra información mediante el comando "echo".
+  *-> Muestra el directorio de trabajo actual y el directorio donde se organizarán los artefactos.
+  *-> Esto se realiza principalmente con fines de registro y depuración.
+
+Step 1: Instalar Node.js
+  *-> Este paso utiliza la tarea NodeTool para instalar Node.js.
+  *-> Especifica que debería instalar la versión 18.x de Node.js.
+  *-> La tarea es responsable de configurar el entorno necesario de Node.js.
+
+Step 2: Npm CLI, Instalar, Construir
+   *-> Este paso es un script que ejecuta varios comandos npm (Gestor de Paquetes de Node).
+   *-> Instala Angular CLI globalmente (npm install -g @angular/cli), instala las dependencias del proyecto (npm install) y compila la aplicación Angular (npm run build).
+   *-> Este paso es responsable de preparar la aplicación Angular para su implementación.
+
+Step 3: Subir archivos a artefactos.
+   *-> Este paso sube los archivos de la aplicación construida al directorio de preparación de artefactos.
+   *-> Especifica el directorio de origen como $(System.DefaultWorkingDirectory)/dist/$(appName) y asigna los archivos subidos al artefacto "drop".
+   *-> Esto se hace generalmente para preparar los archivos de la aplicación para la implementación o distribución posterior.
+
+Insummary: Esta configuración YAML establece una canalización que se activa ante cambios en la rama "main", prepara un entorno Node.js, instala las dependencias del proyecto, compila la aplicación Angular y sube los archivos de la aplicación a un artefacto para su uso o implementación posterior. 
+
+Es un ejemplo básico de una canalización CI/CD para un proyecto Angular.
